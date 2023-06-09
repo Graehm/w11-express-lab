@@ -2,6 +2,7 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const bcrypt =  require('bcrypt')
 const jwt = require('jsonwebtoken')
+
 // the bounder
 const userSchema = new mongoose.mongoose.Schema({
     name: String,
@@ -16,8 +17,8 @@ userSchema.pre('save', async function(next) {
     next()//saying next function
 })
 
-userSchema.methods.generativeAuthToken = async function() {
-    const token = jwt.sign({ _id: this._id }, process.env.SECRET)
+userSchema.methods.generateAuthToken = async function(time) {
+    const token = jwt.sign({ _id: this._id }, process.env.SECRET, {expiresIn: time})
     return token
 }
 
